@@ -223,17 +223,16 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             stats.forEach((stat, index) => {
                 console.log(`--- Traitement de la stat ${index}:`, stat); // Débug 3: Vérifie chaque objet stat
-                // VÉRIFICATION CRUCIALE : S'assurer que les propriétés existent
-                if (stat && stat.gameName && stat.statType && stat.statValue && stat.id) {
+                // VÉRIFICATION CRUCIALE : S'assurer que les propriétés existent avec les noms corrects
+                if (stat && stat.gamename && stat.stattype && stat.statvalue && stat.id) { // <-- CORRIGÉ ici
                     const statItem = document.createElement('div');
                     statItem.classList.add('stat-item');
                     statItem.innerHTML = `
-                        <p><strong>${stat.gameName}</strong>: ${stat.statType} = ${stat.statValue}</p>
-                        <button class="delete-btn" data-stat-id="${stat.id}">Supprimer</button>
+                        <p><strong>${stat.gamename}</strong>: ${stat.stattype} = ${stat.statvalue}</p>  <button class="delete-btn" data-stat-id="${stat.id}">Supprimer</button>
                     `;
                     statsListDiv.appendChild(statItem);
                 } else {
-                    console.error(`--- Erreur: Propriété manquante dans la stat ${index}:`, stat); // Débug 4
+                    console.error(`--- Erreur: Propriété manquante ou incorrecte dans la stat ${index}:`, stat); // Débug 4
                     const errorItem = document.createElement('div');
                     errorItem.classList.add('stat-item', 'error');
                     errorItem.textContent = `Erreur d'affichage pour une stat. Données: ${JSON.stringify(stat)}`;
@@ -269,6 +268,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     headers: {
                         'Content-Type': 'application/json'
                     },
+                    // ENVOIE les noms de propriétés en camelCase vers le backend,
+                    // C'est la convention standard pour le JS. Ton backend doit être configuré
+                    // pour les recevoir ainsi ou les mapper si nécessaire.
                     body: JSON.stringify({ userId: currentUserId, gameName, statType, statValue })
                 });
 
@@ -406,7 +408,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 let statsText = `Statistiques de ${usernameToView}:\n\n`;
                 if (userStats.length > 0) {
                     userStats.forEach(stat => {
-                        statsText += `  ${stat.gameName}: ${stat.statType} = ${stat.statValue}\n`;
+                        // CORRIGÉ ici aussi pour l'affichage des stats recherchées
+                        statsText += `  ${stat.gamename}: ${stat.stattype} = ${stat.statvalue}\n`; 
                     });
                 } else {
                     statsText += "  Aucune statistique enregistrée pour cet utilisateur.";
