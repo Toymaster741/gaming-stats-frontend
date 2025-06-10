@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const loginLink = document.getElementById('loginLink');
     const myStatsLink = document.getElementById('myStatsLink');
     const logoutLink = document.getElementById('logoutLink');
-    const logoutBtn = document.getElementById('logoutBtn');
+    const logoutBtn = document.getElementById('logoutBtn'); // Utilisé pour le bouton de déconnexion dans la section Mes Stats
 
     // Formulaire de connexion
     const loginForm = document.getElementById('loginForm');
@@ -28,12 +28,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const gameNameInput = document.getElementById('gameName');
     const statTypeInput = document.getElementById('statType');
     const statValueInput = document.getElementById('statValue');
-    const statsListDiv = document.getElementById('statsList');
-    const messageElement = document.getElementById('message');
+    const statsListDiv = document.getElementById('statsList'); // L'endroit où les stats sont affichées
+    const messageElement = document.getElementById('message'); // Pour les messages dans la section stats
     const clearStatsBtn = document.getElementById('clearStatsBtn');
 
     // --- Configuration du Backend ---
-    const BACKEND_URL = 'https://gaming-stats-api.onrender.com'; // Assure-toi que c'est le bon port de ton serveur Node.js
+    const BACKEND_URL = 'https://gaming-stats-api.onrender.com'; // ASSURE-TOI QUE C'EST L'URL EXACTE DE TON SERVICE RENDER
 
     // --- Variables de session ---
     let currentUserId = null; // Stocke l'ID de l'utilisateur connecté depuis le backend
@@ -42,20 +42,19 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Fonctions utilitaires ---
 
     // Affiche un message temporaire à l'utilisateur
-    const showMessage = (element, msg, type) => {
+    const showMessage = (element, msg, type = 'info') => { // Ajout d'un type par défaut 'info'
         element.textContent = msg;
-        element.className = type;
+        element.className = type; // Définit la classe (ex: 'success', 'error', 'info')
         element.classList.remove('hidden');
         setTimeout(() => {
             element.classList.add('hidden');
         }, 3000);
     };
 
-    // --- Gestion de l'authentification avec le Backend ---
+    // --- Gestion de l'authentification et de l'interface ---
 
     // Met à jour l'interface utilisateur en fonction de l'état de connexion
-    const updateUIForAuth = () => {
-        // Tente de récupérer l'état de connexion depuis localStorage
+    const updateUIForAuth = async () => { // Rend la fonction async pour appeler displayStats
         const storedUserId = localStorage.getItem('currentUserId');
         const storedUsername = localStorage.getItem('currentUser');
 
@@ -65,21 +64,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
             loginLink.classList.add('hidden');
             myStatsLink.classList.remove('hidden');
-            logoutLink.classList.remove('hidden');
+            logoutLink.classList.remove('hidden'); // Affiche le lien de déconnexion dans la nav
+            
+            // Masque la section de connexion et affiche la section de mes stats
             loginSection.classList.add('hidden');
             myStatsSection.classList.remove('hidden');
-            
-            displayStats(currentUserId); // Affiche les stats de l'utilisateur connecté
+            searchUsersSection.classList.add('hidden'); // Assure que la section recherche est masquée aussi
+
             showMessage(loginMessage, `Bienvenue, ${currentUsername} !`, 'success');
+            await displayStats(currentUserId); // IMPORTANT: Affiche les stats de l'utilisateur connecté APRÈS connexion/rechargement
         } else {
             currentUserId = null;
             currentUsername = null;
 
             loginLink.classList.remove('hidden');
             myStatsLink.classList.add('hidden');
-            logoutLink.classList.add('hidden');
+            logoutLink.classList.add('hidden'); // Masque le lien de déconnexion dans la nav
+
+            // Affiche la section de connexion par défaut
             loginSection.classList.remove('hidden');
             myStatsSection.classList.add('hidden');
+            searchUsersSection.classList.remove('hidden'); // Affiche la section recherche par défaut
+            // Efface les stats affichées si l'utilisateur est déconnecté
+            statsListDiv.innerHTML = '<p>Connectez-vous pour voir vos statistiques.</p>';
         }
     };
 
@@ -88,6 +95,11 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault();
         const username = usernameInput.value.trim();
         const password = passwordInput.value.trim();
+
+        if (!username || !password) {
+            showMessage(loginMessage, 'Veuillez entrer un pseudo et un mot de passe.', 'error');
+            return;
+        }
 
         try {
             const response = await fetch(`${BACKEND_URL}/login`, {
@@ -101,12 +113,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await response.json();
 
             if (response.ok) {
-                // Stocke l'ID et le pseudo de l'utilisateur dans localStorage après une connexion réussie
                 localStorage.setItem('currentUserId', data.userId);
                 localStorage.setItem('currentUser', data.username);
-                updateUIForAuth(); // Met à jour l'interface
+                await updateUIForAuth(); // Met à jour l'interface après connexion réussie
                 showMessage(loginMessage, data.message, 'success');
-                loginForm.reset();
+                loginForm.reset(); // Vide le formulaire de connexion
             } else {
                 showMessage(loginMessage, data.message || 'Erreur de connexion.', 'error');
             }
@@ -117,12 +128,19 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Gère la déconnexion
-    logoutBtn.addEventListener('click', (e) => {
+    logoutBtn.addEventListener('click', (e) => { // Bouton de déconnexion dans la section "Mes stats"
         e.preventDefault();
-        // Retire les informations de l'utilisateur de localStorage
         localStorage.removeItem('currentUserId');
         localStorage.removeItem('currentUser');
         updateUIForAuth(); // Met à jour l'interface
+        showMessage(loginMessage, 'Vous avez été déconnecté.', 'success');
+    });
+
+    logoutLink.addEventListener('click', (e) => { // Lien de déconnexion dans la navigation
+        e.preventDefault();
+        localStorage.removeItem('currentUserId');
+        localStorage.removeItem('currentUser');
+        updateUIForAuth();
         showMessage(loginMessage, 'Vous avez été déconnecté.', 'success');
     });
 
@@ -147,6 +165,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (response.ok) {
                         alert(`Compte ${newUsername} créé ! Vous pouvez maintenant vous connecter.`);
                         usernameInput.value = newUsername; // Pré-remplit le champ pseudo
+                        passwordInput.value = newPassword; // Pré-remplit le champ mot de passe (pour faciliter le test)
                     } else {
                         alert(data.message || 'Erreur lors de la création du compte.');
                     }
@@ -155,8 +174,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     alert('Erreur lors de la création du compte sur le serveur.');
                 }
             } else {
-                alert("Mot de passe non valide.");
+                alert("Mot de passe non valide. L'inscription a été annulée.");
             }
+        } else {
+            alert("Pseudo non valide. L'inscription a été annulée.");
         }
     });
 
@@ -164,16 +185,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Récupère les statistiques d'un utilisateur depuis le backend
     const getStats = async (userId) => {
-        if (!userId) return [];
+        if (!userId) {
+            console.warn('getStats: userId est undefined ou nul. Retourne un tableau vide.');
+            return [];
+        }
         try {
             const response = await fetch(`${BACKEND_URL}/stats/${userId}`);
             if (!response.ok) {
-                throw new Error('Erreur lors de la récupération des stats.');
+                // Si la réponse n'est pas OK, mais le statut est 404 (pas de stats trouvées), ce n'est pas une erreur serveur
+                if (response.status === 404) {
+                    console.log(`Aucune statistique trouvée pour l'utilisateur ${userId}.`);
+                    return [];
+                }
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Erreur lors de la récupération des stats.');
             }
             const stats = await response.json();
             return stats;
         } catch (error) {
-            console.error('Erreur:', error);
+            console.error('Erreur dans getStats:', error);
             showMessage(messageElement, 'Erreur lors du chargement des statistiques.', 'error');
             return [];
         }
@@ -181,21 +211,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Affiche les statistiques pour l'utilisateur courant
     const displayStats = async (userId) => {
+        console.log('--- Appel de displayStats pour userId:', userId); // Débug 1
         const stats = await getStats(userId); // Récupère les stats via le backend
+        console.log('--- Stats reçues du backend pour affichage:', stats); // Débug 2: Vérifie le format des données
+
         statsListDiv.innerHTML = ''; // Vide la liste existante
 
         if (stats.length === 0) {
             statsListDiv.innerHTML = '<p>Aucune statistique enregistrée pour le moment.</p>';
             clearStatsBtn.classList.add('hidden');
         } else {
-            stats.forEach((stat) => { // Plus besoin d'index local, on utilise l'id de la stat du backend
-                const statItem = document.createElement('div');
-                statItem.classList.add('stat-item');
-                statItem.innerHTML = `
-                    <p><strong>${stat.gameName}</strong>: ${stat.statType} = ${stat.statValue}</p>
-                    <button class="delete-btn" data-stat-id="${stat.id}">Supprimer</button>
-                `;
-                statsListDiv.appendChild(statItem);
+            stats.forEach((stat, index) => {
+                console.log(`--- Traitement de la stat ${index}:`, stat); // Débug 3: Vérifie chaque objet stat
+                // VÉRIFICATION CRUCIALE : S'assurer que les propriétés existent
+                if (stat && stat.gameName && stat.statType && stat.statValue && stat.id) {
+                    const statItem = document.createElement('div');
+                    statItem.classList.add('stat-item');
+                    statItem.innerHTML = `
+                        <p><strong>${stat.gameName}</strong>: ${stat.statType} = ${stat.statValue}</p>
+                        <button class="delete-btn" data-stat-id="${stat.id}">Supprimer</button>
+                    `;
+                    statsListDiv.appendChild(statItem);
+                } else {
+                    console.error(`--- Erreur: Propriété manquante dans la stat ${index}:`, stat); // Débug 4
+                    const errorItem = document.createElement('div');
+                    errorItem.classList.add('stat-item', 'error');
+                    errorItem.textContent = `Erreur d'affichage pour une stat. Données: ${JSON.stringify(stat)}`;
+                    statsListDiv.appendChild(errorItem);
+                }
             });
             clearStatsBtn.classList.remove('hidden');
         }
@@ -213,6 +256,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const statType = statTypeInput.value.trim();
         const statValue = statValueInput.value.trim();
 
+        // Ajout de console.log pour vérifier les valeurs avant l'envoi
+        console.log('Tentative d\'ajout de stat avec:');
+        console.log('gameName:', gameName);
+        console.log('statType:', statType);
+        console.log('statValue:', statValue);
+
         if (gameName && statType && statValue) {
             try {
                 const response = await fetch(`${BACKEND_URL}/stats`, {
@@ -226,8 +275,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 const data = await response.json();
 
                 if (response.ok) {
-                    displayStats(currentUserId); // Met à jour l'affichage
-                    statsForm.reset();
+                    await displayStats(currentUserId); // Met à jour l'affichage après un ajout réussi
+                    statsForm.reset(); // Vide le formulaire
                     showMessage(messageElement, data.message, 'success');
                 } else {
                     showMessage(messageElement, data.message || 'Erreur lors de l\'ajout.', 'error');
@@ -237,7 +286,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 showMessage(messageElement, 'Erreur de connexion au serveur.', 'error');
             }
         } else {
-            showMessage(messageElement, 'Veuillez remplir tous les champs.', 'error');
+            showMessage(messageElement, 'Veuillez remplir tous les champs de la statistique.', 'error');
         }
     });
 
@@ -261,7 +310,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const data = await response.json();
 
                     if (response.ok) {
-                        displayStats(currentUserId); // Met à jour l'affichage
+                        await displayStats(currentUserId); // Met à jour l'affichage
                         showMessage(messageElement, data.message, 'success');
                     } else {
                         showMessage(messageElement, data.message || 'Erreur lors de la suppression.', 'error');
@@ -281,7 +330,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        if (confirm('Êtes-vous sûr de vouloir effacer toutes les statistiques ?')) {
+        if (confirm('Êtes-vous sûr de vouloir effacer toutes les statistiques ? Cette action est irréversible.')) {
             try {
                 const response = await fetch(`${BACKEND_URL}/stats/user/${currentUserId}`, {
                     method: 'DELETE'
@@ -290,7 +339,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const data = await response.json();
 
                 if (response.ok) {
-                    displayStats(currentUserId); // Met à jour l'affichage
+                    await displayStats(currentUserId); // Met à jour l'affichage (qui devrait maintenant être vide)
                     showMessage(messageElement, data.message, 'success');
                 } else {
                     showMessage(messageElement, data.message || 'Erreur lors de l\'effacement.', 'error');
@@ -316,7 +365,8 @@ document.addEventListener('DOMContentLoaded', () => {
             // Récupère toutes les stats de tous les utilisateurs pour la recherche
             const response = await fetch(`${BACKEND_URL}/all-users-stats`);
             if (!response.ok) {
-                throw new Error('Erreur lors de la récupération des utilisateurs.');
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Erreur lors de la récupération des utilisateurs.');
             }
             const allUsersWithStats = await response.json();
 
