@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const clearStatsBtn = document.getElementById('clearStatsBtn');
 
     // --- Configuration du Backend ---
-    const BACKEND_URL = 'postgresql://gaming_stats_db_user:GHq2etUp9oA6VaiZv0EsPBoGpYzwyxCs@dpg-d143c9e3jp1c73djuteg-a.frankfurt-postgres.render.com/gaming_stats_db'; // Assure-toi que c'est le bon port de ton serveur Node.js
+    const BACKEND_URL = 'https://gaming-stats-api.onrender.com'; // Assure-toi que c'est le bon port de ton serveur Node.js
 
     // --- Variables de session ---
     let currentUserId = null; // Stocke l'ID de l'utilisateur connecté depuis le backend
