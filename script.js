@@ -397,7 +397,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Gérer le clic sur "Voir les stats de l'utilisateur"
-    searchResultsDiv.addEventListener('click', async (e) => {
+   searchResultsDiv.addEventListener('click', async (e) => {
         if (e.target.classList.contains('view-user-stats-btn')) {
             const usernameToView = e.target.dataset.username;
             const userIdToView = e.target.dataset.userid;
@@ -408,8 +408,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 let statsText = `Statistiques de ${usernameToView}:\n\n`;
                 if (userStats.length > 0) {
                     userStats.forEach(stat => {
-                        // CORRIGÉ ici aussi pour l'affichage des stats recherchées
-                        statsText += `  ${stat.gamename}: ${stat.stattype} = ${stat.statvalue}\n`; 
+                        // C'est cette ligne qui a été mise à jour !
+                        // On utilise stat.gamename, stat.stattype, et stat.statvalue
+                        statsText += `  ${stat.gamename}: ${stat.stattype} = ${stat.statvalue}\n`;
                     });
                 } else {
                     statsText += "  Aucune statistique enregistrée pour cet utilisateur.";
