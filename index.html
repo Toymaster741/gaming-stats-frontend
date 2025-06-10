@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Palmarès Gaming - Accueil</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Mon Palmarès Gaming</h1>
+        <nav>
+            <ul>
+                <li><a href="#search-users">Rechercher des Joueurs</a></li>
+                <li id="loginLink"><a href="#login-section">Se Connecter</a></li>
+                <li id="myStatsLink" class="hidden"><a href="#my-stats-section">Mes Stats</a></li>
+                <li id="logoutLink" class="hidden"><a href="#" id="logoutBtn">Se Déconnecter</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="search-users">
+            <h2>Explorer les Palmarès des Joueurs</h2>
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Rechercher un pseudo...">
+                <button id="searchBtn">Rechercher</button>
+            </div>
+            <div id="searchResults">
+                <p>Utilise la barre de recherche ci-dessus pour trouver d'autres joueurs.</p>
+            </div>
+        </section>
+
+        <section id="login-section">
+            <h2>Se Connecter ou Créer un Compte</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username">Pseudo :</label>
+                    <input type="text" id="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Mot de passe :</label>
+                    <input type="password" id="password" required>
+                </div>
+                <button type="submit">Se Connecter</button>
+            </form>
+            <p>Pas encore de compte ? <a href="#" id="registerLink">Créer un compte</a></p>
+            <p id="loginMessage" class="hidden"></p>
+        </section>
+
+        <section id="my-stats-section" class="hidden">
+            <h2>Mes Statistiques Enregistrées</h2>
+            <div id="statsFormContainer">
+                <h3>Ajouter de Nouvelles Statistiques</h3>
+                <form id="statsForm">
+                    <div class="form-group">
+                        <label for="gameName">Nom du Jeu :</label>
+                        <input type="text" id="gameName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="statType">Type de Stat (ex: K/D Ratio, Victoires) :</label>
+                        <input type="text" id="statType" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="statValue">Valeur :</label>
+                        <input type="text" id="statValue" required>
+                    </div>
+                    <button type="submit">Enregistrer la Stat</button>
+                </form>
+                <p id="message" class="hidden"></p>
+            </div>
+
+            <div id="statsList">
+                <p>Aucune statistique enregistrée pour le moment.</p>
+            </div>
+            <button id="clearStatsBtn" class="hidden">Effacer toutes les statistiques</button>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Mon Palmarès Gaming</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
