@@ -223,8 +223,9 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             stats.forEach((stat, index) => {
                 console.log(`--- Traitement de la stat ${index}:`, stat); // Débug 3: Vérifie chaque objet stat
+              
                 // VÉRIFICATION CRUCIALE : S'assurer que les propriétés existent avec les noms corrects
-                if (stat && stat.gameName && stat.statType && stat.statValue && stat.id) { // <-- CORRIGÉ ici
+                if (stat && stat.gameName && stat.statType && stat.statValue && stat.id) { 
                     const statItem = document.createElement('div');
                     statItem.classList.add('stat-item');
                     statItem.innerHTML = `
@@ -411,7 +412,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     userStats.forEach(stat => {
                         // C'est cette ligne qui a été mise à jour !
                         // On utilise stat.gamename, stat.stattype, et stat.statvalue
-                        statsText += `  ${stat.gamename}: ${stat.stattype} = ${stat.statvalue}\n`;
+                        statsText += `  ${stat.gameName}: ${stat.statType} = ${stat.statValue}\n`;
+
                     });
                 } else {
                     statsText += "  Aucune statistique enregistrée pour cet utilisateur.";
