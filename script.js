@@ -228,8 +228,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     const statItem = document.createElement('div');
                     statItem.classList.add('stat-item');
                     statItem.innerHTML = `
-                        <p><strong>${stat.gamename}</strong>: ${stat.stattype} = ${stat.statvalue}</p>  <button class="delete-btn" data-stat-id="${stat.id}">Supprimer</button>
-                    `;
+                            <p><strong>${stat.gameName}</strong>: ${stat.statType} = ${stat.statValue}</p>
+                             <button class="delete-btn" data-stat-id="${stat.id}">Supprimer</button>
+                        `;
                     statsListDiv.appendChild(statItem);
                 } else {
                     console.error(`--- Erreur: Propriété manquante ou incorrecte dans la stat ${index}:`, stat); // Débug 4
