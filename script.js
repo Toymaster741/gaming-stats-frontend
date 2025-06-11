@@ -406,41 +406,47 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Gérer le clic sur "Voir les stats de l'utilisateur"
-   searchResultsDiv.addEventListener('click', async (e) => {
-        if (e.target.classList.contains('view-user-stats-btn')) {
-            const usernameToView = e.target.dataset.username;
-            const userIdToView = e.target.dataset.userid;
+searchResultsDiv.addEventListener('click', async (e) => {
+    if (e.target.classList.contains('view-user-stats-btn')) {
+        const usernameToView = e.target.dataset.username;
+        const userIdToView = e.target.dataset.userid;
 
-            try {
-                const userStats = await getStats(userIdToView); // Récupère les stats de l'utilisateur recherché via le backend
+        try {
+            const userStats = await getStats(userIdToView);
 
-                let statsText = `Statistiques de ${usernameToView}:\n\n`;
-                if (userStats.length > 0) {
-                    userStats.forEach(stat => {
-                        // C'est cette ligne qui a été mise à jour !
-                        // On utilise stat.gamename, stat.stattype, et stat.statvalue
-                        statsText += `  ${stat.gameName}: ${stat.statType} = ${stat.statValue}\n`;
-
-                    });
-                } else {
-                    statsText += "  Aucune statistique enregistrée pour cet utilisateur.";
-                }
-               modalTitle.textContent = `Statistiques de ${usernameToView}`;
-                modalBody.textContent = statsText;
-                modal.classList.remove('hidden');
-             } catch (error) {
-                console.error('Erreur lors de la visualisation des stats:', error);
-                modalTitle.textContent = "Erreur";
-                modalBody.textContent = 'Erreur lors de la récupération des stats de l\'utilisateur.';
-                modal.classList.remove('hidden');
+            let statsText = '';
+            if (userStats.length > 0) {
+                userStats.forEach(stat => {
+                    statsText += `• ${stat.gameName}: ${stat.statType} = ${stat.statValue}\n`;
+                });
+            } else {
+                statsText = "Aucune statistique enregistrée pour cet utilisateur.";
             }
-        }
-    });
 
-    // Ferme la modale lorsqu'on clique sur le bouton "×"
-    closeModalBtn.addEventListener('click', () => {
-        modal.classList.add('hidden');
-    });
+            // Affiche dans la modale
+            modalTitle.textContent = `Statistiques de ${usernameToView}`;
+            modalBody.textContent = statsText;
+            userStatsModal.classList.remove('hidden');
+        } catch (error) {
+            console.error('Erreur lors de la visualisation des stats:', error);
+            modalTitle.textContent = "Erreur";
+            modalBody.textContent = "Impossible de charger les statistiques.";
+            userStatsModal.classList.remove('hidden');
+        }
+    }
+});
+
+// --- Fermer la modale
+closeModalBtn.addEventListener('click', () => {
+    userStatsModal.classList.add('hidden');
+});
+
+window.addEventListener('click', (e) => {
+    if (e.target === userStatsModal) {
+        userStatsModal.classList.add('hidden');
+    }
+});
+
 
     // --- Initialisation au chargement de la page ---
     updateUIForAuth(); // Vérifie si un utilisateur est déjà connecté au chargement de la page
