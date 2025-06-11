@@ -426,7 +426,7 @@ searchResultsDiv.addEventListener('click', async (e) => {
             // Affiche dans la modale
             modalTitle.textContent = `Statistiques de ${usernameToView}`;
             modalBody.textContent = statsText;
-            userStatsModal.classList.remove('hidden');
+            modal.classList.add('show');
         } catch (error) {
             console.error('Erreur lors de la visualisation des stats:', error);
             modalTitle.textContent = "Erreur";
@@ -443,7 +443,7 @@ closeModalBtn.addEventListener('click', () => {
 
 window.addEventListener('click', (e) => {
     if (e.target === userStatsModal) {
-        userStatsModal.classList.add('hidden');
+        modal.classList.remove('show');
     }
 });
 
