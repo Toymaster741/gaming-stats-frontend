@@ -1278,72 +1278,57 @@ footer {
     section {
         padding: 15px;
     }
+/* === MODALE DE STATS AUTRES JOUEURS === */
 
-    /* 🌟 MODALE STATS AUTRES JOUEURS */
 .modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.6);
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 9999;
-}
-
-.modal.hidden {
-    display: none !important;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.75);
 }
 
 .modal-content {
-    background-color: var(--secondary-bg-color);
-    padding: 30px;
+    background-color: #fff;
+    padding: 2rem;
     border-radius: 12px;
-    max-width: 600px;
     width: 90%;
-    color: var(--text-color);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+    max-width: 500px;
+    max-height: 80vh;
+    overflow-y: auto;
     position: relative;
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.3);
 }
 
 .modal-content h3 {
-    font-family: 'Orbitron', sans-serif;
-    color: var(--accent-color);
-    margin-bottom: 20px;
-    font-size: 1.6rem;
-    text-align: center;
+    margin-top: 0;
+    font-size: 1.5rem;
 }
 
 .modal-content pre {
     white-space: pre-wrap;
-    font-family: 'Montserrat', sans-serif;
-    background-color: var(--card-bg-color);
-    padding: 15px;
-    border-radius: 8px;
-    border: 1px solid var(--border-color);
-    max-height: 300px;
-    overflow-y: auto;
+    font-family: "Courier New", monospace;
     font-size: 1rem;
+    margin-top: 1rem;
 }
 
-.modal-content .close {
+/* Bouton de fermeture (X) */
+.close {
     position: absolute;
-    top: 15px;
-    right: 20px;
-    font-size: 1.8rem;
-    color: var(--accent-color);
+    top: 1rem;
+    right: 1.2rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
     cursor: pointer;
-    transition: color 0.2s;
 }
 
-.modal-content .close:hover {
-    color: white;
-}
-
-
-    section h2 {
-        font-size: 1.5rem;
-    }
+/* Pour masquer */
+.hidden {
+    display: none !important;
 }
