@@ -436,13 +436,14 @@ searchResultsDiv.addEventListener('click', async (e) => {
     }
 });
 
-// --- Fermer la modale
+// Fermer la modale avec le bouton X
 closeModalBtn.addEventListener('click', () => {
     modal.classList.remove('show');
 });
 
+// Fermer la modale en cliquant en dehors
 window.addEventListener('click', (e) => {
-    if (e.target === userStatsModal) {
+    if (e.target === modal) {
         modal.classList.remove('show');
     }
 });
