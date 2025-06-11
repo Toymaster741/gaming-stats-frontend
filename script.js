@@ -431,14 +431,14 @@ searchResultsDiv.addEventListener('click', async (e) => {
             console.error('Erreur lors de la visualisation des stats:', error);
             modalTitle.textContent = "Erreur";
             modalBody.textContent = "Impossible de charger les statistiques.";
-            modal.classList.remove('hidden');
+            modal.classList.add('show');
         }
     }
 });
 
 // --- Fermer la modale
 closeModalBtn.addEventListener('click', () => {
-    modal.classList.add('hidden');
+    modal.classList.remove('show');
 });
 
 window.addEventListener('click', (e) => {
