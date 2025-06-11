@@ -1,5 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
     // --- Éléments du DOM ---
+    
+    // Modale pour l'affichage des stats d'autres joueurs
+    const modal = document.getElementById('userStatsModal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalBody = document.getElementById('modalBody');
+    const closeModalBtn = document.getElementById('closeModalBtn');
+    
     // Sections
     const searchUsersSection = document.getElementById('search-users');
     const loginSection = document.getElementById('login-section');
@@ -418,12 +425,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else {
                     statsText += "  Aucune statistique enregistrée pour cet utilisateur.";
                 }
-                alert(statsText); // Pour une implémentation plus avancée, tu afficherais cela dans une modale ou une section dédiée.
-            } catch (error) {
+               modalTitle.textContent = `Statistiques de ${usernameToView}`;
+                modalBody.textContent = statsText;
+                modal.classList.remove('hidden');
+             } catch (error) {
                 console.error('Erreur lors de la visualisation des stats:', error);
-                alert('Erreur lors de la récupération des stats de l\'utilisateur.');
+                modalTitle.textContent = "Erreur";
+                modalBody.textContent = 'Erreur lors de la récupération des stats de l\'utilisateur.';
+                modal.classList.remove('hidden');
             }
         }
+    });
+
+    // Ferme la modale lorsqu'on clique sur le bouton "×"
+    closeModalBtn.addEventListener('click', () => {
+        modal.classList.add('hidden');
     });
 
     // --- Initialisation au chargement de la page ---
