@@ -1329,6 +1329,6 @@ footer {
 }
 
 /* Pour masquer */
-.hidden {
+.hidden:not(.modal) {
     display: none !important;
 }
