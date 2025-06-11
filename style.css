@@ -1281,11 +1281,11 @@ footer {
 /* === MODALE DE STATS AUTRES JOUEURS === */
 
 .modal {
-    display: none; /* 🚫 Masquée par défaut */
+    display: none;
     justify-content: center;
     align-items: center;
     position: fixed;
-    z-index: 1000;
+    z-index: 9999; /* 👈 augmente pour s’assurer qu’elle est au-dessus */
     left: 0;
     top: 0;
     width: 100vw;
@@ -1293,34 +1293,23 @@ footer {
     background-color: rgba(0, 0, 0, 0.75);
 }
 
-/* ✅ Affichage actif de la modale */
 .modal.show {
     display: flex;
 }
 
 .modal-content {
-    background-color: #fff;
-    padding: 2rem;
+    background: white;
     border-radius: 12px;
-    width: 90%;
-    max-width: 500px;
+    padding: 2rem;
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.4);
     max-height: 80vh;
     overflow-y: auto;
+    width: 90%;
+    max-width: 500px;
     position: relative;
-    box-shadow: 0 0 25px rgba(0, 0, 0, 0.3);
+    z-index: 10000;
 }
 
-.modal-content h3 {
-    margin-top: 0;
-    font-size: 1.5rem;
-}
-
-.modal-content pre {
-    white-space: pre-wrap;
-    font-family: "Courier New", monospace;
-    font-size: 1rem;
-    margin-top: 1rem;
-}
 
 /* Bouton de fermeture (X) */
 .close {
