@@ -1281,7 +1281,7 @@ footer {
 /* === MODALE DE STATS AUTRES JOUEURS === */
 
 .modal {
-    display: flex;
+    display: none; /* 🚫 Masquée par défaut */
     justify-content: center;
     align-items: center;
     position: fixed;
@@ -1291,6 +1291,11 @@ footer {
     width: 100vw;
     height: 100vh;
     background-color: rgba(0, 0, 0, 0.75);
+}
+
+/* ✅ Affichage actif de la modale */
+.modal.show {
+    display: flex;
 }
 
 .modal-content {
