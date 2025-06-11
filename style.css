@@ -1279,6 +1279,70 @@ footer {
         padding: 15px;
     }
 
+    /* 🌟 MODALE STATS AUTRES JOUEURS */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.modal.hidden {
+    display: none !important;
+}
+
+.modal-content {
+    background-color: var(--secondary-bg-color);
+    padding: 30px;
+    border-radius: 12px;
+    max-width: 600px;
+    width: 90%;
+    color: var(--text-color);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+    position: relative;
+}
+
+.modal-content h3 {
+    font-family: 'Orbitron', sans-serif;
+    color: var(--accent-color);
+    margin-bottom: 20px;
+    font-size: 1.6rem;
+    text-align: center;
+}
+
+.modal-content pre {
+    white-space: pre-wrap;
+    font-family: 'Montserrat', sans-serif;
+    background-color: var(--card-bg-color);
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    max-height: 300px;
+    overflow-y: auto;
+    font-size: 1rem;
+}
+
+.modal-content .close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 1.8rem;
+    color: var(--accent-color);
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.modal-content .close:hover {
+    color: white;
+}
+
+
     section h2 {
         font-size: 1.5rem;
     }
